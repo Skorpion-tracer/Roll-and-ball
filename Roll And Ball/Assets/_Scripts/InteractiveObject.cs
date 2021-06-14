@@ -1,10 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace RollAndBall
 {
-    public abstract class InteractiveObject : MonoBehaviour, IInteractable
+    public abstract class InteractiveObject : MonoBehaviour, IInteractable, IComparable<InteractiveObject>
     {
         public bool IsInteractable { get; } = true;
 
@@ -40,6 +40,11 @@ namespace RollAndBall
             {
                 renderer.material.color = Color.cyan;
             }
+        }
+
+        public int CompareTo(InteractiveObject other)
+        {
+            return name.CompareTo(other.name);
         }
     }
 }

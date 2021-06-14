@@ -7,20 +7,24 @@ using Random = UnityEngine.Random;
 namespace RollAndBall
 {
     public sealed class BadBonus : InteractiveObject, IFlay, 
-                IRotation, ICloneable
+                IRotation, ICloneable, IFlicker
     {
+        private Material _material;
         private float _lengthFlay;
         private float _speedRotation;
+        private DisplayBonuses _displayToBonuses;
 
         private void Awake()
         {
-            _lengthFlay = Random.Range(1.0f, 5.0f);
-            _speedRotation = Random.Range(10.0f, 50.0f);
+            _material = GetComponent<Renderer>().material;
+            _lengthFlay = Random.Range(2.3f, 2.5f);
+            _speedRotation = Random.Range(10.0f, 90.0f);
+            _displayToBonuses = FindObjectOfType<DisplayBonuses>();
         }
 
         protected override void Interaction()
         {
-
+            _displayToBonuses.DisplayToGameOver();
         }
 
         public void Flay()
@@ -39,6 +43,11 @@ namespace RollAndBall
         {
             var result = Instantiate(gameObject, transform.position, transform.rotation, transform.parent);
             return result;
+        }
+
+        public void Flicker()
+        {
+            _material.color = Color.red;
         }
     }
 }

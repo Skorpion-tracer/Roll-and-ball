@@ -2,13 +2,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace RollAndBall
 {
     public sealed class GameController : MonoBehaviour, IDisposable
     {
+        [SerializeField] private Text _textWin;
         private InteractiveObject[] _interactiveObjects;
-
         private void Awake()
         {
             _interactiveObjects = FindObjectsOfType<InteractiveObject>();
