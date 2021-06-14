@@ -4,23 +4,23 @@ using UnityEngine;
 
 namespace RollAndBall
 {
-    public sealed class GoodBonus : InteractiveObject, IFlay, IFlicker
+    public sealed class BonusToSpeed : InteractiveObject, IFlay, IFlicker
     {
-        public int Point;
+        [SerializeField] private float _increaseSpeed = 2.0f;
+
         private Material _material;
         private float _lengthFlay;
-        private DisplayBonuses _displayBonuses;
 
         private void Awake()
         {
             _material = GetComponent<Renderer>().material;
-            _lengthFlay = Random.Range(2.0f, 2.5f);
-            _displayBonuses = FindObjectOfType<DisplayBonuses>();
+            _lengthFlay = Random.Range(2.0f, 4f);
         }
 
         protected override void Interaction()
         {
-            _displayBonuses.Display(5);
+            var Player = FindObjectOfType<PlayerBall>();
+            Player.Speed += _increaseSpeed;
         }
 
         public void Flay()
@@ -32,8 +32,7 @@ namespace RollAndBall
 
         public void Flicker()
         {
-            _material.color = new Color(_material.color.r, _material.color.g, _material.color.b,
-                Mathf.PingPong(Time.time, 1.0f));
+            _material.color = Color.yellow;
         }
     }
 }
