@@ -1,29 +1,33 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace RollAndBall
 {
-    public sealed class GoodBonus : InteractiveObject, IFlay, IFlicker
+    public sealed class GoodBonus : InteractiveObject, IFly, 
+                                    IFlicker
     {
         public int Point;
-        private Material _material;
         private float _lengthFlay;
         private DisplayBonuses _displayBonuses;
 
-        private void Awake()
+        protected override void Awake()
         {
-            _material = GetComponent<Renderer>().material;
-            _lengthFlay = Random.Range(2.0f, 2.5f);
+            base.Awake();
+            _lengthFlay = UnityEngine.Random.Range(2.0f, 2.5f);
             _displayBonuses = FindObjectOfType<DisplayBonuses>();
         }
+
+        public event Action OnPickUp;
 
         protected override void Interaction()
         {
             _displayBonuses.Display(5);
+            OnPickUp?.Invoke();
         }
 
-        public void Flay()
+        public void Fly()
         {
             transform.localPosition = new Vector3(transform.localPosition.x,
                 Mathf.PingPong(Time.time, _lengthFlay),
@@ -32,8 +36,7 @@ namespace RollAndBall
 
         public void Flicker()
         {
-            _material.color = new Color(_material.color.r, _material.color.g, _material.color.b,
-                Mathf.PingPong(Time.time, 1.0f));
+            _material.color = Color.cyan;
         }
     }
 }

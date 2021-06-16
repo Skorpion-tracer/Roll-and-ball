@@ -9,7 +9,7 @@ namespace RollAndBall
     public sealed class ListInteractableObject<T> : IEnumerator, IEnumerable where T : InteractiveObject
     {
         private InteractiveObject[] _interactiveObjects;
-        private static int _index = 0;
+        private static int _index = -1;
         private InteractiveObject _current;
 
         public ListInteractableObject()
@@ -26,13 +26,12 @@ namespace RollAndBall
 
         public bool MoveNext()
         {
+            _index++;
             if (_index == _interactiveObjects.Length - 1)
             {
                 Reset();
                 return false;
-            }
-
-            _index++;
+            }            
             return true;
         }
 

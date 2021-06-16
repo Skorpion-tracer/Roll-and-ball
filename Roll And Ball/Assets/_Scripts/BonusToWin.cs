@@ -8,14 +8,13 @@ namespace RollAndBall
 {
     public sealed class BonusToWin : InteractiveObject, IFlicker
     {
-        private Material _material;
         private ListInteractableObject<BonusToWin> _listBonus;
         private DisplayBonuses _displayBonuses;
 
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             _listBonus = new ListInteractableObject<BonusToWin>();
-            _material = GetComponent<Renderer>().material;
             _displayBonuses = FindObjectOfType<DisplayBonuses>();
         }
 

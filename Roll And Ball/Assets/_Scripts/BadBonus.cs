@@ -6,28 +6,32 @@ using Random = UnityEngine.Random;
 
 namespace RollAndBall
 {
-    public sealed class BadBonus : InteractiveObject, IFlay, 
+    public sealed class BadBonus : InteractiveObject, IFly, 
                 IRotation, ICloneable, IFlicker
     {
-        private Material _material;
         private float _lengthFlay;
         private float _speedRotation;
-        private DisplayBonuses _displayToBonuses;
 
-        private void Awake()
+        private event EventHandler<CaughtPlayerEventArgs> _caughtPlayer;
+        public event EventHandler<CaughtPlayerEventArgs> CaughtPlayer
         {
-            _material = GetComponent<Renderer>().material;
+            add { _caughtPlayer += value; }
+            remove { _caughtPlayer -= value; }
+        }
+        
+        protected override void Awake()
+        {
+            base.Awake();
             _lengthFlay = Random.Range(2.3f, 2.5f);
             _speedRotation = Random.Range(10.0f, 90.0f);
-            _displayToBonuses = FindObjectOfType<DisplayBonuses>();
         }
 
         protected override void Interaction()
         {
-            _displayToBonuses.DisplayToGameOver();
+            _caughtPlayer?.Invoke(this, new CaughtPlayerEventArgs(_color));
         }
 
-        public void Flay()
+        public void Fly()
         {
             transform.localPosition = new Vector3(transform.localPosition.x,
                 Mathf.PingPong(Time.time, _lengthFlay),

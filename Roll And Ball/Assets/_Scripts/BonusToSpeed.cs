@@ -4,16 +4,15 @@ using UnityEngine;
 
 namespace RollAndBall
 {
-    public sealed class BonusToSpeed : InteractiveObject, IFlay, IFlicker
+    public sealed class BonusToSpeed : InteractiveObject, IFly, IFlicker
     {
         [SerializeField] private float _increaseSpeed = 2.0f;
-
-        private Material _material;
+        
         private float _lengthFlay;
 
-        private void Awake()
+        protected override void Awake()
         {
-            _material = GetComponent<Renderer>().material;
+            base.Awake();
             _lengthFlay = Random.Range(2.0f, 4f);
         }
 
@@ -23,7 +22,7 @@ namespace RollAndBall
             Player.Speed += _increaseSpeed;
         }
 
-        public void Flay()
+        public void Fly()
         {
             transform.localPosition = new Vector3(transform.localPosition.x,
                 Mathf.PingPong(Time.time, _lengthFlay),

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,6 +15,7 @@ namespace RollAndBall
             set {
                 if (value > 10.0f)
                     value = 10.0f;
+                    
                 _speed = value;
             }
         }
@@ -22,6 +24,7 @@ namespace RollAndBall
 
         private void Start()
         {
+            if (Speed > 10) throw new Exception("Скорость выше нормальной!!!");
             _rigidbody = GetComponent<Rigidbody>();
         }
 

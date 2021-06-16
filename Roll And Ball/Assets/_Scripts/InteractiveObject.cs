@@ -4,9 +4,18 @@ using Random = UnityEngine.Random;
 
 namespace RollAndBall
 {
-    public abstract class InteractiveObject : MonoBehaviour, IInteractable, IComparable<InteractiveObject>
+    public abstract class InteractiveObject : MonoBehaviour, IComparable<InteractiveObject>
     {
+        protected Color _color;
         public bool IsInteractable { get; } = true;
+
+        protected Material _material;
+
+        protected virtual void Awake()
+        {
+            _material = GetComponent<Renderer>().material;
+            _color = _material.color;
+        }
 
         private void OnTriggerEnter(Collider other)
         {
@@ -19,28 +28,6 @@ namespace RollAndBall
         }
 
         protected abstract void Interaction();
-
-        private void Start()
-        {
-            ((IAction)this).Action();
-            ((IInitialization)this).Action();
-        }
-
-        void IAction.Action()
-        {
-            if (TryGetComponent(out Renderer renderer))
-            {
-                renderer.material.color = Random.ColorHSV();
-            }
-        }
-
-        void IInitialization.Action()
-        {
-            if (TryGetComponent(out Renderer renderer))
-            {
-                renderer.material.color = Color.cyan;
-            }
-        }
 
         public int CompareTo(InteractiveObject other)
         {
