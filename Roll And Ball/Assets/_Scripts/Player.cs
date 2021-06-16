@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,11 +7,24 @@ namespace RollAndBall
 {
     public class Player : MonoBehaviour
     {
-        public float Speed = 3.0f;
+        [SerializeField] private float _speed = 3.0f;
+
+        public float Speed
+        {
+            get => _speed;
+            set {
+                if (value > 10.0f)
+                    value = 10.0f;
+                    
+                _speed = value;
+            }
+        }
+
         private Rigidbody _rigidbody;
 
         private void Start()
         {
+            if (Speed > 10) throw new Exception("Скорость выше нормальной!!!");
             _rigidbody = GetComponent<Rigidbody>();
         }
 
@@ -21,7 +35,7 @@ namespace RollAndBall
 
             Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
 
-            _rigidbody.AddForce(movement * Speed);
+            _rigidbody.AddForce(movement * _speed);
         }
     }
 }

@@ -1,30 +1,25 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace RollAndBall
 {
-    public sealed class GoodBonus : InteractiveObject, IFly, 
-                                    IFlicker
+    public sealed class BonusToSpeed : InteractiveObject, IFly, IFlicker
     {
-        public int Point;
+        [SerializeField] private float _increaseSpeed = 2.0f;
+        
         private float _lengthFlay;
-        private DisplayBonuses _displayBonuses;
 
         protected override void Awake()
         {
             base.Awake();
-            _lengthFlay = UnityEngine.Random.Range(2.0f, 2.5f);
-            _displayBonuses = FindObjectOfType<DisplayBonuses>();
+            _lengthFlay = Random.Range(2.0f, 4f);
         }
-
-        public event Action OnPickUp;
 
         protected override void Interaction()
         {
-            _displayBonuses.Display(5);
-            OnPickUp?.Invoke();
+            var Player = FindObjectOfType<PlayerBall>();
+            Player.Speed += _increaseSpeed;
         }
 
         public void Fly()
@@ -36,7 +31,7 @@ namespace RollAndBall
 
         public void Flicker()
         {
-            _material.color = Color.cyan;
+            _material.color = Color.yellow;
         }
     }
 }
