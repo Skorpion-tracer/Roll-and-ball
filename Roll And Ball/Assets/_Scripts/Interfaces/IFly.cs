@@ -4,8 +4,8 @@ using UnityEngine;
 
 namespace RollAndBall
 {
-    public interface IFlay
+    public interface IFly
     {
-        void Flay();
+        void Fly();
     }
 }

@@ -1,22 +1,34 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Helper;
 
 namespace RollAndBall
 {
-    public sealed class CameraController : MonoBehaviour
+    public sealed class CameraController : IExecute
     {
-        public Player Player;
+        private Transform _player;
+        private Transform _mainCamera;
         private Vector3 _offset;
-    
-        private void Start()
+        private Animator _animator;
+
+        public CameraController(Transform player, Transform mainCamera, Animator animator)
         {
-            _offset = transform.position - Player.transform.position;
+            _player = player;
+            _mainCamera = mainCamera;
+            _mainCamera.LookAt(_player);
+            _animator = animator;
+            _offset = _mainCamera.position - _player.position;
         }
 
-        private void LateUpdate()
+        public void Execute()
         {
-            transform.position = Player.transform.position + _offset;
+            _mainCamera.position = _player.position + _offset;
         }
+
+        public void IsShakeCamera()
+        {
+            _animator.SetTrigger(AnimationConsts.SHAKE_CAMERA);            
+        }        
     }
 }
