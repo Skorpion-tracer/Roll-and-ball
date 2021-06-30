@@ -3,25 +3,27 @@ using UnityEngine.UI;
 
 namespace RollAndBall
 {
-    public sealed class DisplayBonuses : MonoBehaviour
+    public sealed class DisplayBonuses
     {
-        [SerializeField] private Text _textToWin;
-        [SerializeField] private Text _text;
-        [SerializeField] private Text _textGameOver;
+        private Text _textToWin;
+        private Text _textScore;
+
+        public DisplayBonuses(GameObject score, GameObject win)
+        {
+            _textToWin = win.GetComponent<Text>();
+            _textToWin.text = string.Empty;
+            _textScore = score.GetComponent<Text>();
+            _textScore.text = string.Empty;
+        }
 
         public void Display(int value)
         {
-            _text.text = $"Вы набрали {value}";
+            _textScore.text = $"Вы набрали {value}";
         }
 
         public void DisplayToWin()
         {
             _textToWin.text = "Вы Победили!!!";
-        }
-
-        public void DisplayToGameOver()
-        {
-            _textGameOver.text = $"Конец Игры!";
         }
     }
 }

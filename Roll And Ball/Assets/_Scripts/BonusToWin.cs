@@ -2,33 +2,42 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEngine.Debug;
 
 namespace RollAndBall
 {
     public sealed class BonusToWin : InteractiveObject, IFlicker
     {
         private ListInteractableObject<BonusToWin> _listBonus;
-        private DisplayBonuses _displayBonuses;
+
+        private static int _countBonuses;
 
         protected override void Awake()
         {
             base.Awake();
+            _countBonuses = 0;
             _listBonus = new ListInteractableObject<BonusToWin>();
-            _displayBonuses = FindObjectOfType<DisplayBonuses>();
         }
 
+        public event Action OnDisplayBonus;
+        public event Action<object, CaughtPlayerEventArgs> OnWin;
+
         protected override void Interaction()
-        {            
-            if (_listBonus.MoveNext() == true)
+        {
+            _countBonuses++;
+            if (_countBonuses >= 3)
             {
-                Log($"Объект: {_listBonus.Current}");
+                OnWin?.Invoke(this, new CaughtPlayerEventArgs(_color));
+                OnDisplayBonus?.Invoke();
+            }
+        }
+
+        public override void Execute()
+        {
+            if (!IsInteractable)
+            {
                 return;
             }
-            else
-            {
-                _displayBonuses.DisplayToWin();
-            }
+            Flicker();
         }
 
         public void Flicker()

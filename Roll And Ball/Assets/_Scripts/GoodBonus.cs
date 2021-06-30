@@ -8,23 +8,33 @@ namespace RollAndBall
     public sealed class GoodBonus : InteractiveObject, IFly, 
                                     IFlicker
     {
-        public int Point;
+        [SerializeField] private int _point;
+
         private float _lengthFlay;
-        private DisplayBonuses _displayBonuses;
 
         protected override void Awake()
         {
             base.Awake();
             _lengthFlay = UnityEngine.Random.Range(2.0f, 2.5f);
-            _displayBonuses = FindObjectOfType<DisplayBonuses>();
         }
 
         public event Action OnPickUp;
+        public event Action<int> OnDisplayBonus;
 
         protected override void Interaction()
         {
-            _displayBonuses.Display(5);
+            OnDisplayBonus?.Invoke(_point);
             OnPickUp?.Invoke();
+        }
+
+        public override void Execute()
+        {
+            if (!IsInteractable)
+            {
+                return;
+            }
+            Fly();
+            Flicker();
         }
 
         public void Fly()

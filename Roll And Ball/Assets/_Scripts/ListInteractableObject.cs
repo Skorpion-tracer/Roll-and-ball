@@ -26,12 +26,13 @@ namespace RollAndBall
 
         public bool MoveNext()
         {
-            _index++;
             if (_index == _interactiveObjects.Length - 1)
             {
                 Reset();
                 return false;
-            }            
+            }
+
+            _index++;
             return true;
         }
 

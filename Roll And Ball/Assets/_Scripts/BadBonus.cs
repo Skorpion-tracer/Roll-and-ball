@@ -11,13 +11,6 @@ namespace RollAndBall
     {
         private float _lengthFlay;
         private float _speedRotation;
-
-        private event EventHandler<CaughtPlayerEventArgs> _caughtPlayer;
-        public event EventHandler<CaughtPlayerEventArgs> CaughtPlayer
-        {
-            add { _caughtPlayer += value; }
-            remove { _caughtPlayer -= value; }
-        }
         
         protected override void Awake()
         {
@@ -26,9 +19,27 @@ namespace RollAndBall
             _speedRotation = Random.Range(10.0f, 90.0f);
         }
 
+        private event EventHandler<CaughtPlayerEventArgs> _caughtPlayer;
+        public event EventHandler<CaughtPlayerEventArgs> CaughtPlayer
+        {
+            add { _caughtPlayer += value; }
+            remove { _caughtPlayer -= value; }
+        }
+
         protected override void Interaction()
         {
             _caughtPlayer?.Invoke(this, new CaughtPlayerEventArgs(_color));
+        }
+
+        public override void Execute()
+        {
+            if (!IsInteractable)
+            {
+                return;
+            }
+            Fly();
+            Rotation();
+            Flicker();
         }
 
         public void Fly()

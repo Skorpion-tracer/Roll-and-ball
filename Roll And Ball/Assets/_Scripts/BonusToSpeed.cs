@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using RollAndBall.Model;
 using UnityEngine;
 
 namespace RollAndBall
@@ -20,6 +19,16 @@ namespace RollAndBall
         {
             var Player = FindObjectOfType<PlayerBall>();
             Player.Speed += _increaseSpeed;
+        }
+
+        public override void Execute()
+        {
+            if (!IsInteractable)
+            {
+                return;
+            }
+            Fly();
+            Flicker();
         }
 
         public void Fly()

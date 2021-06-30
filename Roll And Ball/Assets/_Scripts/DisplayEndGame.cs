@@ -7,9 +7,9 @@ namespace RollAndBall
     {
         private Text _finishGameLabel;
 
-        public DisplayEndGame(Text finishGameLabel)
+        public DisplayEndGame(GameObject endGame)
         {
-            _finishGameLabel = finishGameLabel;
+            _finishGameLabel = endGame.GetComponent<Text>();
             _finishGameLabel.text = string.Empty;
         }
 
