@@ -18,9 +18,15 @@ namespace RollAndBall
         private InputController _inputController;
         private PlayerBase _player;
         private Reference _reference;
+        private SaveDataRepository _saveDataRepository;
+        private bool _playerDrop;
+
+        [SerializeField] private Transform _centerLevel;
+        [SerializeField] private float _distanceFromCenterToPlayer = 300;
 
         private void Awake()
         {
+            _saveDataRepository = new SaveDataRepository();
             _reference = new Reference();
             _interactiveObjects = new ListInteractableObject<InteractiveObject>();
             _displayEndGame = new DisplayEndGame(_reference.EndGame);
@@ -61,6 +67,7 @@ namespace RollAndBall
         private void RestartGame()
         {
             SceneManager.LoadScene(sceneBuildIndex: 0);
+            
             Time.timeScale = 1.0f;
             _reference.RestartButton.gameObject.SetActive(true);
         }
@@ -82,6 +89,18 @@ namespace RollAndBall
                     continue;
                 }
                 interactiveObject.Execute();
+            }
+
+            float distance = Vector3.Distance(_player.transform.position, 
+                            _centerLevel.position);
+
+            if (distance > _distanceFromCenterToPlayer)
+            {
+                foreach (InteractiveObject o in _interactiveObjects)
+                {
+                    _saveDataRepository.SaveBonus(o);
+                }
+                RestartGame();
             }
         }
 

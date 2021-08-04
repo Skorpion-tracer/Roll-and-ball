@@ -4,9 +4,9 @@ using UnityEngine;
 
 namespace RollAndBall
 {
-    public sealed class SavedData<T>
+    public interface IData<T>
     {
-        public int CountBonuses;
-        public static T IdPlayer = default;
+        void Save(T data, string path = null);
+        T Load(string path = null);
     }
 }
