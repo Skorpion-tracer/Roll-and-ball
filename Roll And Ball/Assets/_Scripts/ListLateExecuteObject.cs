@@ -5,24 +5,17 @@ using Object = UnityEngine.Object;
 namespace RollAndBall
 {
 
-    public sealed class ListExecuteObject : IEnumerator, IEnumerable
+    public sealed class ListLateExecuteObject : IEnumerator, IEnumerable
     {
-        private IExecute[] _interactiveObjects;
+        private ILateExecute[] _interactiveObjects;
         private int _index = -1;
 
-        public ListExecuteObject()
+        public ListLateExecuteObject()
         {
-            var interactiveObjects = Object.FindObjectsOfType<InteractiveObject>();
-            for (var i = 0; i < interactiveObjects.Length; i++)
-            {
-                if (interactiveObjects[i] is IExecute interactiveObject)
-                {
-                    AddExecuteObject(interactiveObject);
-                }
-            }
+
         }
 
-        public void AddExecuteObject(IExecute execute)
+        public void AddExecuteObject(ILateExecute execute)
         {
             if (_interactiveObjects == null)
             {
@@ -33,7 +26,7 @@ namespace RollAndBall
             _interactiveObjects[Length - 1] = execute;
         }
 
-        public IExecute this[int index]
+        public ILateExecute this[int index]
         {
             get => _interactiveObjects[index];
             private set => _interactiveObjects[index] = value;

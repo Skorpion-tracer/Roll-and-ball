@@ -15,6 +15,7 @@ namespace RollAndBall
         private DisplayBonuses _displayBonuses;
         private CameraController _cameraController;
         private ListExecuteObject _interactiveObject;
+        private ListLateExecuteObject _lateExecuteObjects;
         private InputController _inputController;
         private PlayerBase _player;
         private Reference _reference;
@@ -35,9 +36,10 @@ namespace RollAndBall
             _cameraController = new CameraController(_player.transform, _reference.MainCamera.transform, _reference.Animator);
             _inputController = new InputController(_player);            
             _interactiveObject = new ListExecuteObject();
+            _lateExecuteObjects = new ListLateExecuteObject();
 
-            _interactiveObject.AddExecuteObject(_cameraController);
             _interactiveObject.AddExecuteObject(_inputController);
+            _lateExecuteObjects.AddExecuteObject(_cameraController);
 
             foreach (var o in _interactiveObjects)
             {
@@ -101,6 +103,20 @@ namespace RollAndBall
                     _saveDataRepository.SaveBonus(o);
                 }
                 RestartGame();
+            }
+        }
+
+        private void LateUpdate()
+        {
+            for (var i = 0; i < _lateExecuteObjects.Length; i++)
+            {
+                var interactiveObject = _lateExecuteObjects[i];
+
+                if (interactiveObject == null)
+                {
+                    continue;
+                }
+                interactiveObject.LateExecute();
             }
         }
 

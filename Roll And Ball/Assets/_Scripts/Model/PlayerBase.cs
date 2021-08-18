@@ -19,6 +19,7 @@ namespace RollAndBall.Model
         }
 
         public abstract void Move(float x, float y, float z);
+        public abstract void Rotation(float mouseX, float mouseY);
     }
 }
 
