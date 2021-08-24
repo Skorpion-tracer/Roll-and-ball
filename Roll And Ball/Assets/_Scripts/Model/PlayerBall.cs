@@ -19,9 +19,24 @@ namespace RollAndBall.Model
             _camera = Camera.main;
         }
 
-        public override void Move(float x, float y, float z)
+        public override void MoveForward()
         {
-            _rigidbodyPlayer.AddForce(new Vector3(x, y, z) * Speed);
+            _rigidbodyPlayer.AddForce(_camera.transform.forward * Speed);
+        }
+
+        public override void MoveBack()
+        {
+            _rigidbodyPlayer.AddForce(-_camera.transform.forward * Speed);
+        }
+
+        public override void MoveRight()
+        {
+            _rigidbodyPlayer.AddForce(_camera.transform.right * Speed);
+        }
+
+        public override void MoveLeft()
+        {
+            _rigidbodyPlayer.AddForce(-_camera.transform.right * Speed);
         }
 
         public override void Rotation(float mouseX, float mouseY)
