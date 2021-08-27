@@ -4,11 +4,8 @@ using UnityEngine;
 
 namespace RollAndBall
 {
-    public sealed class PlayerBall : Player
+    public interface IFly
     {
-        private void FixedUpdate()
-        {
-            Move();
-        }
+        void Fly();
     }
 }

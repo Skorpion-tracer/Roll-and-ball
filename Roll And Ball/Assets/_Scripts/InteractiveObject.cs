@@ -1,12 +1,33 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace RollAndBall
 {
-    public abstract class InteractiveObject : MonoBehaviour, IInteractable
+    public abstract class InteractiveObject : MonoBehaviour, IComparable<InteractiveObject>, IExecute
     {
-        public bool IsInteractable { get; } = true;
+        protected Color _color;
+
+        private bool _isInteractable;
+
+        public bool IsInteractable
+        {
+            get => _isInteractable;
+            private set {
+                _isInteractable = value;
+                GetComponent<Renderer>().enabled = _isInteractable;
+                GetComponent<Collider>().enabled = _isInteractable;
+            }
+        }
+
+        protected Material _material;
+
+        protected virtual void Awake()
+        {
+            IsInteractable = true;
+            _material = GetComponent<Renderer>().material;
+            _color = _material.color;
+        }
 
         private void OnTriggerEnter(Collider other)
         {
@@ -15,31 +36,15 @@ namespace RollAndBall
                 return;
             }
             Interaction();
-            Destroy(gameObject);
+            IsInteractable = false;
         }
 
         protected abstract void Interaction();
+        public abstract void Execute();
 
-        private void Start()
+        public int CompareTo(InteractiveObject other)
         {
-            ((IAction)this).Action();
-            ((IInitialization)this).Action();
-        }
-
-        void IAction.Action()
-        {
-            if (TryGetComponent(out Renderer renderer))
-            {
-                renderer.material.color = Random.ColorHSV();
-            }
-        }
-
-        void IInitialization.Action()
-        {
-            if (TryGetComponent(out Renderer renderer))
-            {
-                renderer.material.color = Color.cyan;
-            }
+            return name.CompareTo(other.name);
         }
     }
 }

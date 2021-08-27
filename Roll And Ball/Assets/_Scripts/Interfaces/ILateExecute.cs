@@ -2,10 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace RollAndBall
+public interface ILateExecute
 {
-    public interface IFlay
-    {
-        void Flay();
-    }
+    void LateExecute();
 }

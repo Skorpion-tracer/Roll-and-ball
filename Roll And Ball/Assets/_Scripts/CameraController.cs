@@ -1,22 +1,51 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Helper;
+using RollAndBall.Model;
 
 namespace RollAndBall
 {
-    public sealed class CameraController : MonoBehaviour
+    public sealed class CameraController : ILateExecute
     {
-        public Player Player;
+        private readonly string _mouseAxisX = "Mouse X";
+
+        private Transform _player;
+        private Transform _mainCamera;
+        private Animator _animator;
+
+        private float _cameraMoveSpeed = 3.0f;
+        private float _rotationSpeed = 1.5f;
+        private float _rotationY = 0.0f;
         private Vector3 _offset;
-    
-        private void Start()
+
+        public CameraController(Transform player, Transform mainCamera, Animator animator)
         {
-            _offset = transform.position - Player.transform.position;
+            _player = player;
+            _mainCamera = mainCamera;
+            _animator = animator;
+
+            _rotationY = _mainCamera.eulerAngles.y;
+            _offset = _player.position - _mainCamera.position;
         }
 
-        private void LateUpdate()
+        public void LateExecute()
         {
-            transform.position = Player.transform.position + _offset;
+            CameraUpdater();
+        }
+
+        public void IsShakeCamera()
+        {
+            _animator.SetTrigger(AnimationConsts.SHAKE_CAMERA);            
+        }
+
+        private void CameraUpdater()
+        {
+            _rotationY += Input.GetAxis(_mouseAxisX) * _rotationSpeed * _cameraMoveSpeed;
+
+            Quaternion rotation = Quaternion.Euler(0, _rotationY, 0);
+            _mainCamera.position = _player.position - (rotation * _offset);
+            _mainCamera.LookAt(_player);
         }
     }
 }
